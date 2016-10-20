@@ -1,0 +1,8 @@
+Casi monostadio tutti terminati.
+Per ciascun fluido, del caso monostadio sono stati plottati i
+piani T-s e p-h e l'andamento del COP al variare della Tco.
+{solo il codice del piano T-s per i fluido R245fa da problemi
+e non parte. C'è un errore riscontrato alla linea 110 relativa
+alla costruzione della isoentalpica 3-4}.
+Terminato codice di proiezione del ciclo del caso bistadio
+sul piano T-s. Come fluido è stato scelto: R1234yf.
