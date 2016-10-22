@@ -21,17 +21,21 @@ for i=1:length(T_A_vett)
     
     T1=T_B-DT_min_ev;
     Tev=T_B-DT_sur-DT_min_ev;
+    
+    %punto 1
     pev=refpropm('p','T',Tev+273.15,'q',1,fluid)/100;
     p1=pev;
     s1=refpropm('s','T',T1+273.15,'p',p1*100,fluid)/1000;
     h1=refpropm('h','T',T1+273.15,'p',p1*100,fluid)/1000;
     
+    %punto 2s
     s2s=s1;
     Tco=T_A+DT_min_co;
     pco=refpropm('p','T',Tco+273.15,'q',1,fluid)/100;
     p2s=pco;
     h2s=refpropm('h','p',p2s*100,'s',s2s*1000,fluid)/1000;
     
+    %punto 2
     beta_c=p2s/p1;
     eta_c=a*exp(-b*beta_c)+c;
     h2=((h2s-h1)/eta_c)+h1;
@@ -39,11 +43,13 @@ for i=1:length(T_A_vett)
     T2=refpropm('T','p',p2s*100,'h',h2*1000,fluid)-273.15;
     s2=refpropm('s','p',p2s*100,'h',h2*1000,fluid)/1000;
     
+    %punto 3
     p3=p2;
     T3=refpropm('T','p',p3*100,'q',0,fluid)-273.15;
     s3=refpropm('s','p',p3*100,'q',0,fluid)/1000;
     h3=refpropm('h','p',p3*100,'q',0,fluid)/1000;
     
+    %punto 4
     h4=h3;
     p4=p1;
     T4=Tev;
@@ -83,11 +89,11 @@ s_V(length(T_vett))=scr;
 %Isobara pev sotto campana
 s_in=refpropm('s','T',Tev+273.15,'q',0,fluid)/1000;
 s_fin=refpropm('s','T',Tev+273.15,'q',1,fluid)/1000;
-s_vett=linspace(s_in,s_fin,100);
-for k=1:length(s_vett)-1
+s_vett2sc=linspace(s4,s_fin,100);
+for k=1:length(s_vett2sc)-1 %Linea piena dell'isobara interessata dal ciclo
     T_sc(k)=Tev;
 end
-T_sc(length(s_vett))=Tev;
+T_sc(length(s_vett2sc))=Tev;
 
 %Isobara pev fuori campana
 Tv=T1;
@@ -133,18 +139,25 @@ for m=1:length(T_vett5)-1
 end
 s_is(length(T_vett5))=s2s;
 
+
 %Compressione 1-2
-T_vett6=linspace(T1,T2,2);
-s_compr=linspace(s1,s2,2);
+T_vett6=linspace(T1,T2,100);
+p_vett6=linspace(pev,pco,100);
+for q=1:length(p_vett6)
+    h2v=refpropm('h','p',p_vett6(q)*100,'s',s1*1000,fluid)/1000;
+    h2r=((h2v-h1)/eta_c)+h1;
+    s2r(q)=refpropm('s','p',p_vett6(q)*100,'h',h2r*1000,fluid)/1000;
+end
 
 figure (i)
- plot(s_L,T_vett,'k','linewidth',1.5)
+ plot(s_L,T_vett,'k','linewidth',1.5)          %curva inferiore
  hold on
- plot(s_V,T_vett,'k','linewidth',1.5)
+ plot(s_V,T_vett,'k','linewidth',1.5)          %curva superiore
  hold on
- plot(s_vett,T_sc,'b','linewidth',1.0)
+ plot(s_vett2sc,T_sc,'b','linewidth',1.0)       %curva piena evaporazione
+ legend_labels{i}=sprintf('Temperatura EV %i °C',T_A_vett(i));
  hold on
- plot(s_vett2,T_s,'b','linewidth',1.0)
+ plot(s_vett2,T_s,'b','linewidth',1.0)          
  hold on
  plot(s_fc,T_vett2,'b','linewidth',1.0)
  hold on
@@ -154,13 +167,14 @@ figure (i)
  hold on
  plot(s_is,T_vett5,'b','linewidth',1.0)
  hold on
- plot(s_compr,T_vett6,'--b','linewidth',1.0)
- 
+ plot(s2r,T_vett6,'--b','linewidth',1.0)
+ legend(legend_labels(i))
  xlabel('Entropia Specifica [kJ/kg K]','FontName','Times','FontSize',18,'FontWeight','Bold')
  ylabel('Temperatura [°C]','FontName','Times','FontSize',18,'FontWeight','Bold') 
  set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
  title('Diagramma T-s. Caso monostadio-R134a','FontName','Times','FontSize',20,'FontWeight','Bold')
  
+ grid on
  plot([s1 s2 s3 s4 s2s],[T1 T2 T3 T4 T2s],'ko','MarkerFaceColor','k','MarkerSize',6)
  
 end

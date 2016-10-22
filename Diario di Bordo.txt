@@ -6,3 +6,6 @@ e non parte. C'è un errore riscontrato alla linea 110 relativa
 alla costruzione della isoentalpica 3-4}.
 Terminato codice di proiezione del ciclo del caso bistadio
 sul piano T-s. Come fluido è stato scelto: R1234yf.
+
+Ho modificato l'isobara di evaporazione
+aggiunto la legenda per ogni temperatura
