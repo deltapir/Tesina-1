@@ -4,7 +4,7 @@ clc
 
 %% CASO MONOSTADIO - R1234yf 
 %DATI PROBLEMA
-fluid='R1234yf';
+%fluid={'R1234yf' 'R245fa' 'R134a'};
 T_B=-12; %°C
 %T_A_vett=[35 45 60];  %°C
 T_A_vett=[35 45 60];
@@ -19,18 +19,30 @@ a=-2.648;
 b=1.553;
 c=0.6085;
 
+for f=1:3
+    if f==1
+        fluid='R1234yf'
+    else
+        if f==2
+            fluid='R245fa'
+        else
+            fluid='R134a'
+        end
+    end
+ 
+    
 for i=1:length(T_A_vett)
     T_A=T_A_vett(i);
-    
     T_1=T_B-DT_min_ev;
     T_ev=T_B-DT_sur-DT_min_ev;
+    T_co=T_A+DT_min_co;
+
     p_ev=refpropm('p','T',T_ev+273.15,'q',1,fluid)/100;
     p_1=p_ev;
     s_1=refpropm('s','T',T_1+273.15,'p',p_1*100,fluid)/1000;
     h_1=refpropm('h','T',T_1+273.15,'p',p_1*100,fluid)/1000;
     
     s2_s=s_1;
-    T_co=T_A+DT_min_co;
     p_co=refpropm('p','T',T_co+273.15,'q',1,fluid)/100;
     p_2s=p_co;
     h_2s=refpropm('h','p',p_2s*100,'s',s2_s*1000,fluid)/1000;
@@ -76,7 +88,7 @@ for i=1:length(T_A_vett);
     Tev=T_B-DT_sur-DT_min_ev;
     Tco=T_A+DT_min_co;
     
-    Tintvett=linspace(Tev,Tco-1,100);
+    Tintvett=linspace(Tev,Tco,100);
     for j=1:length(Tintvett);
     pint=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
     
@@ -92,7 +104,7 @@ for i=1:length(T_A_vett);
     s2s=s1;
     pco=refpropm('p','T',Tco+273.15,'q',1,fluid)/100;
     p2s=pco;
-    T2s=refpropm('T','p',pco*100,'s',s2s*1000,fluid)-273.15;
+    T2s=refpropm('T','p',p2s*100,'s',s2s*1000,fluid)-273.15;
     h2s=refpropm('h','p',p2s*100,'s',s2s*1000,fluid)/1000;
     
     beta_c1=p2s/p1;
@@ -161,6 +173,14 @@ for i=1:length(T_A_vett);
     Dcop(j)=cop(j)-COP(i);              %variazione del cop bistadio rispetto il caso monostadio
     end
     
+    figure(f)
+    grid on
+    legend_labels{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
+    xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
+    ylabel('Variazione di COP','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    %set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
+    %title('Diagramma T-s. Caso bistadio-R1234yf','FontName','Times','FontSize',20,'FontWeight','Bold')
     plot(Tintvett, Dcop);
     hold on
+end
 end
