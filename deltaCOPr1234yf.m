@@ -30,7 +30,7 @@ for f=1:3
         end
     end
  
-    
+%%CASO MONOSTADIO
 for i=1:length(T_A_vett)
     T_A=T_A_vett(i);
     T_1=T_B-DT_min_ev;
@@ -88,7 +88,7 @@ for i=1:length(T_A_vett);
     Tev=T_B-DT_sur-DT_min_ev;
     Tco=T_A+DT_min_co;
     
-    Tintvett=linspace(Tev,Tco,100);
+    Tintvett=linspace(Tev,Tco-1,50);
     for j=1:length(Tintvett);
     pint=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
     
@@ -170,14 +170,16 @@ for i=1:length(T_A_vett);
     m7=m4-m1;  
     pint(j)=pint;
     cop(j)=m4*(h4-h5)/(m1*(h2-h1)+m7*(h3-h7));
-    Dcop(j)=cop(j)-COP(i);              %variazione del cop bistadio rispetto il caso monostadio
+    Dcop(j)=(cop(j)-COP(i))/COP(i)*100;              %variazione del cop bistadio rispetto il caso monostadio
     end
     
     figure(f)
     grid on
-    legend_labels{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
+    %legend_labels{i}=sprintf('Temperatura COP %i °C',T_A_vett(i));
+    %legend_labelsf{f}=sprintf('Fluido %f :',fluid);
     xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
     ylabel('Variazione di COP','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    %legend(legend_labels(i), legend_labelsf{f})
     %set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
     %title('Diagramma T-s. Caso bistadio-R1234yf','FontName','Times','FontSize',20,'FontWeight','Bold')
     plot(Tintvett, Dcop);
