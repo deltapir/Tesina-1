@@ -76,9 +76,9 @@ for i=1:length(T_A_vett);
     Tev=T_B-DT_sur-DT_min_ev;
     Tco=T_A+DT_min_co;
     
-    Tintvett=linspace(Tev,Tco-1,100);
+    Tintvett=linspace(Tev,Tco,200);
     for j=1:length(Tintvett);
-    pint=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
+    pint=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100
     
     %% Calcolo delle proprietà
     
@@ -153,14 +153,14 @@ for i=1:length(T_A_vett);
 
     %%calcoli sul cop
     
-    m4=Qco/(h4-h5);             %portata al punto 4
-    m1=m4*h4/(h2+h3*(h8-h5)/(h6-h7));   %portata in 7
-    m7=m4-m1;  
+    m4=Qco*1000/(h4-h5)             %portata al punto 4
+       %portata in 7
+    m1=m4-m7;  
     pint(j)=pint;
     cop(j)=m4*(h4-h5)/(m1*(h2-h1)+m7*(h3-h7));
-    Dcop(j)=cop(j)-COP(i);              %variazione del cop bistadio rispetto il caso monostadio
+    Dcop(j)=((cop(j)-COP(i))/cop(j));              %variazione percentuale del cop bistadio rispetto il caso monostadio
     end
     
-    plot(Tintvett, Dcop);
-    hold on
+    figure(i)
+    plot(pint, Dcop);
 end
