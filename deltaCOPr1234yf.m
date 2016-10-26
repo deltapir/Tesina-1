@@ -184,7 +184,7 @@ for i=1:length(T_A_vett);
     title(title_fluido)
     plot(Tintvett, Dcop);
     xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Variazione di COP','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    ylabel('Variazione di COP [%]','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
 end %fine ciclo temperatura di condensazione i
