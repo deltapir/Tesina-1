@@ -94,8 +94,8 @@ for i=1:length(T_A_vett);
     
     Tintvett=linspace(Tev,Tco-1,50);
     for j=1:length(Tintvett);
-    pint(j)=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
-  
+    pint=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
+    
     %% Calcolo delle proprietà
     
     %punto 1
@@ -119,8 +119,8 @@ for i=1:length(T_A_vett);
     s2=refpropm('s','p',p2s*100,'h',h2*1000,fluid)/1000;
         
     %punto 7
-    p7=pint(j);
-    T7=refpropm('t','p',pint(j)*100,'q',q7,fluid)-273.15;
+    p7=pint;
+    T7=refpropm('t','p',pint*100,'q',q7,fluid)-273.15;
     h7=refpropm('h','t',T7+273.15,'q',q7,fluid)/1000;
     s7=refpropm('s','t',T7+273.15,'q',q7,fluid)/1000;
     
@@ -151,7 +151,7 @@ for i=1:length(T_A_vett);
     
     %punto 6
     h6=h5;
-    p6=pint(j);
+    p6=pint;
     T6=refpropm('t','p',p6*100,'h',h6*1000,fluid)-273.15;
     s6=refpropm('s','p',p6*100,'h',h6*1000,fluid)/1000;
     
@@ -170,18 +170,16 @@ for i=1:length(T_A_vett);
     %%calcoli sul cop
     
     m4=Qco/(h4-h5);             %portata al punto 4
-    m1(j)=m4*h4/(h2+h3*(h8-h5)/(h6-h7));   %portata in 7
-    m7(j)=m4-m1(j);  
-    %pint(j)=pint
-    cop(j)=m4*(h4-h5)/(m1(j)*(h2-h1)+m7(j)*(h3-h7));
+    m1(i)=m4*h4/(h2+h3*(h8-h5)/(h6-h7));   %portata in 7
+    m7=m4-m1(i);  
+    pint(j)=pint;
+    cop(j)=m4*(h4-h5)/(m1(i)*(h2-h1)+m7*(h3-h7));
     Dcop(j)=(cop(j)-COP(i))/COP(i)*100;              %variazione del cop bistadio rispetto il caso monostadio
     
     end %fine ciclo temperatura intermedia j
     
     T_A_vett(i) %per far apparire in output la temperatura
     
-    %GRAFICO DELTACOPvsTEMPERATURA INTERNA
-    figure(1)
     subplot(1,3,f)
     grid on
     legend_temperatura{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
@@ -193,35 +191,7 @@ for i=1:length(T_A_vett);
     ylabel('Variazione di COP [%]','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
 
-    %GRAFICO PORTATA DEL COMPRESSORE DI BASSA PRESSIONE vs PRESSIONE
-    %INTERNA
-    figure(2)
-    subplot(1,3,f)
-    grid on
-    legend_portata_cpbasso{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
-    plot(pint, m1);
-    legend(legend_portata_cpbasso);
-    hold on
-    title(title_fluido);
-    xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata del compressore di bassa pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
-    hold on
     
-    %GRAFICO PORTATA DEL COMPRESSORE DI MEDIA PRESSIONE vs PRESSIONE
-    %INTERNA
-    figure(3)
-    subplot(1,3,f)
-    grid on
-    legend_portata_cpbasso{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
-    plot(pint, m7);
-    legend(legend_portata_cpbasso);
-    hold on
-    title(title_fluido);
-    xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata del compressore di bassa pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
-    hold on
-    
-
 end %fine ciclo temperatura di condensazione i
   
     %set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
