@@ -22,11 +22,15 @@ c=0.6085;
 for f=1:3
     if f==1
         fluid='R1234yf'
+        title_fluido=sprintf('Fluido r1234yf');
     else
         if f==2
             fluid='R245fa'
+            title_fluido=sprintf('Fluido R245fa');
+
         else
             fluid='R134a'
+            title_fluido=sprintf('Fluido R134a');
         end
     end
  
@@ -172,20 +176,20 @@ for i=1:length(T_A_vett);
     cop(j)=m4*(h4-h5)/(m1*(h2-h1)+m7*(h3-h7));
     Dcop(j)=(cop(j)-COP(i))/COP(i)*100;              %variazione del cop bistadio rispetto il caso monostadio
     end %fine ciclo temperatura intermedia j
-    
-    figure(f)
-    legend_temperatura{i}=sprintf('Temperatura CO %i °C',T_A_vett(i));
-    plot(Tintvett, Dcop);
+    T_A_vett(i)
+    subplot(1,3,f)
+    grid on
+    legend_temperatura{i}=sprintf('Temperatura CO %i °C',T_A_vett(i))
     legend(legend_temperatura)
+    title(title_fluido)
+    plot(Tintvett, Dcop);
+    xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
+    ylabel('Variazione di COP','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
 end %fine ciclo temperatura di condensazione i
-    figure(f)
-    grid on
-    legend_fluido{f}=sprintf('Fluido %f :',fluid);
-    xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Variazione di COP','FontName','Times','FontSize',18,'FontWeight','Bold') 
+  
     %set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
     %title('Diagramma T-s. Caso bistadio-R1234yf','FontName','Times','FontSize',20,'FontWeight','Bold')
-    hold on
+    %hold on
 end %fine cirlo fluido f
