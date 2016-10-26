@@ -22,7 +22,7 @@ c=0.6085;
 for f=1:3
     if f==1
         fluid='R1234yf'
-        title_fluido=sprintf('Fluido r1234yf');
+        title_fluido=sprintf('Fluido R1234yf');
     else
         if f==2
             fluid='R245fa'
