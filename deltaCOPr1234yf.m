@@ -94,11 +94,12 @@ for i=1:length(T_A_vett);
     
     Tintvett=linspace(Tev,Tco-1,50);
     for j=1:length(Tintvett);
-    pint(j)=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
+        
+        pint(j)=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
   
-    %% Calcolo delle proprietà
+        %% Calcolo delle proprietà
     
-    %punto 1
+        %punto 1
     pev=refpropm('p','T',Tev+273.15,'q',1,fluid)/100;
     p1=pev;
     s1=refpropm('s','T',T1+273.15,'p',p1*100,fluid)/1000;
@@ -176,6 +177,28 @@ for i=1:length(T_A_vett);
     cop(j)=m4*(h4-h5)/(m1(j)*(h2-h1)+m7(j)*(h3-h7));
     Dcop(j)=(cop(j)-COP(i))/COP(i)*100;              %variazione del cop bistadio rispetto il caso monostadio
     
+%     PUNTO 9
+%     FISSO LA TEMPERATURA DEL CONDENSATORE (Tco=60°C) e la PRESSIONE DEL
+%     COMPRESSORE DI ALTA PRESSIONE ([5.58478329336861]bar) corrispoondente più o meno al COP massimonel caso bistaadio. L'indice j che
+%     corrisponde a questi valori è j=24. Quindi mi prendo i valori per
+%     j=24. Entro con questi dati all'interno dell'IF e mi calcolo la cilindrata dei due compressori    
+    if (j==24)&&(T_A==60)
+        j=24;
+        ac=1.086; %valori per il rendimento del compressore
+        bc=-0.07129;
+%     COMPRESSORE ALTA
+        betacil(j)=pint(j)/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
+        etacil(j)=ac*exp(bc*betacil(j)); %rendimento del compressore volumetrico
+        rho=refpropm('d','p',pint(j)*100,'h',h7*1000,fluid); %densità dell'aria aspirata al punto 7
+        CILa=m7(j)/(rho*etacil(j))*1000   %cilindrata in LITRI
+%     COMPRESSORE BASSA
+        betacil=pco/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
+        etacil=ac*exp(bc*betacil); %rendimento del compressore volumetrico
+        rho=refpropm('d','p',pint(j)*100,'h',h7*1000,fluid); %densità dell'aria aspirata al punto 7
+        CILb=m1(j)/(rho*etacil)*1000   %cilindrata in LITRI
+    end
+    
+    
     end %fine ciclo temperatura intermedia j
     
     T_A_vett(i) %per far apparire in output la temperatura
@@ -207,7 +230,7 @@ for i=1:length(T_A_vett);
     ylabel('Portata del compressore di bassa pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
-    %GRAFICO PORTATA DEL COMPRESSORE DI MEDIA PRESSIONE vs PRESSIONE
+    %GRAFICO PORTATA DEL COMPRESSORE DI ALTA PRESSIONE vs PRESSIONE
     %INTERNA
     figure(3)
     subplot(1,3,f)
@@ -218,12 +241,16 @@ for i=1:length(T_A_vett);
     hold on
     title(title_fluido);
     xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata del compressore di bassa pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    ylabel('Portata del compressore di alta pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
 
 end %fine ciclo temperatura di condensazione i
-  
+
+
+    
+    
+    %================================================================
     %set(gca,'FontName','Times','FontSize',18,'FontWeight','Bold')
     %title('Diagramma T-s. Caso bistadio-R1234yf','FontName','Times','FontSize',20,'FontWeight','Bold')
     
