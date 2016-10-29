@@ -179,24 +179,23 @@ for i=1:length(T_A_vett);
     
 %     PUNTO 9
 %     FISSO LA TEMPERATURA DEL CONDENSATORE (Tco=60°C) e la PRESSIONE DEL
-%     COMPRESSORE DI ALTA PRESSIONE ([5.58478329336861]bar) corrispoondente più o meno al COP massimo nel caso bistaadio. L'indice j che
+%     COMPRESSORE DI ALTA PRESSIONE ([5.58478329336861]bar) corrispoondente più o meno al COP massimonel caso bistaadio. L'indice j che
 %     corrisponde a questi valori è j=24. Quindi mi prendo i valori per
 %     j=24. Entro con questi dati all'interno dell'IF e mi calcolo la cilindrata dei due compressori    
     if (j==24)&&(T_A==60)
-        %j=24;
+        j=24;
         ac=1.086; %valori per il rendimento del compressore
         bc=-0.07129;
-        pintscelta=pint(j)
 %     COMPRESSORE ALTA
-        betacil(j)=pco/pint(j); %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
+        betacil(j)=pint(j)/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
         etacil(j)=ac*exp(bc*betacil(j)); %rendimento del compressore volumetrico
         rho=refpropm('d','p',pint(j)*100,'h',h7*1000,fluid); %densità dell'aria aspirata al punto 7
-        CILa=m7(j)*1000/(50*rho*etacil(j))  %cilindrata in LITRI
+        CILa=50*m7(j)/(rho*etacil(j))*1000   %cilindrata in LITRI
 %     COMPRESSORE BASSA
-        betacilb=pco/pev;
-        etacilb=ac*exp(bc*betacilb); %rendimento del compressore volumetrico
-        rho=refpropm('d','p',pev*100,'h',h1*1000,fluid); %densità dell'aria aspirata al punto 1
-        CILb=m1(j)*1000/(50*rho*etacilb)   %cilindrata in LITRI - decimetri cubici
+        betacil=pco/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
+        etacil=ac*exp(bc*betacil); %rendimento del compressore volumetrico
+        rho=refpropm('d','p',pint(j)*100,'h',h1*1000,fluid); %densità dell'aria aspirata al punto 1
+        CILb=50*m1(j)/(rho*etacil)*1000   %cilindrata in LITRI - decimetri cubici
     end
     
     
