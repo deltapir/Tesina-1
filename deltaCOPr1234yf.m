@@ -194,7 +194,7 @@ for i=1:length(T_A_vett);
 %     COMPRESSORE BASSA
         betacil=pco/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
         etacil=ac*exp(bc*betacil); %rendimento del compressore volumetrico
-        rho=refpropm('d','p',pint(j)*100,'h',h7*1000,fluid); %densità dell'aria aspirata al punto 7
+        rho=refpropm('d','p',pint(j)*100,'h',h1*1000,fluid); %densità dell'aria aspirata al punto 1
         CILb=m1(j)/(rho*etacil)*1000   %cilindrata in LITRI
     end
     
