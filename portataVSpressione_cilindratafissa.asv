@@ -18,7 +18,7 @@ q7=1;
 a=-2.648;   
 b=1.553;
 c=0.6085;
-CIL={[0.0295 0.2896] [0.0706 7.5366] [0.0212 0.3744]}; %r1234yf r245fa r134a | cilindrata alta, cilindrata bassa
+CIL={[0.0315 0.0579] [0.0840 0.9804] [0.0231 0.1795]}; %r1234yf r245fa r134a | cilindrata alta, cilindrata bassa
 %anche se dovremmo fissare un fluido. Quindi alla fine abbiamo un solo
 %valore di cilindrata.
 %fisso il R1234yf
@@ -28,7 +28,7 @@ fluid='R1234yf';
 %fisso la temperatura a 60°C
 %fisso la cilindrata
 
-CILb=0.2896/1000;
+CILb=2.8955/1000;
 
 %%CASO BISTADIO
 
@@ -120,7 +120,7 @@ CILb=0.2896/1000;
     bc=-0.07129;
     betacil=p2/p1;
     etacil=ac*exp(bc*betacil);
-    m1c(j)=rho1*CILb*50*etacil;                     %portata in 7 con cilindrata fissa
+    m1c(j)=rho1*CILb*50*etacil;
     m1v(j)=m4(j)*h4(j)/(h2+h3*(h8-h5)/(h6-h7));   %portata in 7 variabile
     
     m41c(j)=m1c(j)/m4(j);
@@ -157,13 +157,16 @@ CILb=0.2896/1000;
     %GRAFICO PORTATA DEL COMPRESSORE DI BASSA PRESSIONE vs PRESSIONE
     %INTERNA
     figure(1)
+    grid on
     %legend_portata_cpbasso=sprintf('Temperatura CO 60 °C');
     plot(pint, m41v,'r',pint,m41c,'k');
     %legend(legend_portata_cpbasso);
+    hold on
     title('r1234yf');
     xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata corretta','FontName','Times','FontSize',18,'FontWeight','Bold')
-    grid on
+    ylabel('Portata corretta','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    hold on
+    
 %     %GRAFICO PORTATA DEL COMPRESSORE DI ALTA PRESSIONE vs PRESSIONE
 %     %INTERNA
 %     figure(2)
