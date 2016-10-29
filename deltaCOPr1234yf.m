@@ -214,8 +214,9 @@ for i=1:length(T_A_vett);
     hold on
     title(title_fluido);
     xlabel('Temperatura Intermedia [°C]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Variazione di COP [%]','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    ylabel('\DeltaCOP [%]','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
+
 
     %GRAFICO PORTATA DEL COMPRESSORE DI BASSA PRESSIONE vs PRESSIONE
     %INTERNA
@@ -227,8 +228,8 @@ for i=1:length(T_A_vett);
     legend(legend_portata_cpbasso);
     hold on
     title(title_fluido);
-    xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata del compressore di bassa pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    xlabel('Pressione intermedia [bar]','FontName','Times','FontSize',18,'FontWeight','Bold')
+    ylabel('Portata del compressore di BP [kg/s]','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
     %GRAFICO PORTATA DEL COMPRESSORE DI ALTA PRESSIONE vs PRESSIONE
@@ -241,8 +242,8 @@ for i=1:length(T_A_vett);
     legend(legend_portata_cpbasso);
     hold on
     title(title_fluido);
-    xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata del compressore di alta pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
+    xlabel('Pressione intermedia [bar]','FontName','Times','FontSize',18,'FontWeight','Bold')
+    ylabel('Portata del compressore di AP [kg/s]','FontName','Times','FontSize',18,'FontWeight','Bold') 
     hold on
     
 
@@ -256,3 +257,11 @@ end %fine ciclo temperatura di condensazione i
     %title('Diagramma T-s. Caso bistadio-R1234yf','FontName','Times','FontSize',20,'FontWeight','Bold')
     
 end %fine cirlo fluido f
+figure(1)
+suptitle('\DeltaCOP - Temperatura intermedia')
+
+figure(2)
+suptitle('Portata BP - Pressione intermedia')
+
+figure(3)
+suptitle('Portata AP - Pressione intermedia')
