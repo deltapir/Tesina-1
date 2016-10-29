@@ -5,4 +5,4 @@ Qui descriverò un po' la situazione dei vari files: che manca, che ci sta da fa
 Sono finiti tutti i punti.
 
 -Il grafico del punto 10 è finito.
-
+-I grafici del punto 8 sono finiti.
