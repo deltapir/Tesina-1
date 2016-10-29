@@ -36,7 +36,7 @@ CILb=0.2896/1000;
     Tev=T_B-DT_sur-DT_min_ev;
     Tco=T_A+DT_min_co;
     
-    Tintvett=linspace(Tev,Tco-1,50);
+    Tintvett=linspace(Tev,Tco-1,100);
     for j=1:length(Tintvett);
         
         pint(j)=refpropm('p','t',Tintvett(j)+273.15,'q',0,fluid)/100;
@@ -113,67 +113,38 @@ CILb=0.2896/1000;
     T9=refpropm('t','p',p9*100,'h',h9*1000,fluid)-273.15;
     s9=refpropm('s','p',p9*100,'h',h9*1000,fluid)/1000;
 
-    %%calcoli sul cop
+   %% calcoli
     
-    m4(j)=Qco/(h4(j)-h5);             %portata al punto 4
-    ac=1.086; %valori per il rendimento del compressore
-    bc=-0.07129;
-    betacil=p2/p1;
-    etacil=ac*exp(bc*betacil);
+    m4(j)=Qco/(h4(j)-h5);               %portata al punto 4
+    ac=1.086;                           %valori per il rendimento del compressore
+    bc=-0.07129;                        
+    betacil=p2/p1;                                  %rapporto di compressione del compressore di bassa pressione
+    etacil=ac*exp(bc*betacil);                      %rendimento del compressore di bassa pressione
     m1c(j)=rho1*CILb*50*etacil;                     %portata in 7 con cilindrata fissa
-    m1v(j)=m4(j)*h4(j)/(h2+h3*(h8-h5)/(h6-h7));   %portata in 7 variabile
+    m1v(j)=m4(j)*h4(j)/(h2+h3*(h8-h5)/(h6-h7));     %portata in 7 con cilindrata variabile
     
-    m41c(j)=m1c(j)/m4(j);
-    m41v(j)=m1v(j)/m4(j);
-    %m7(j)=m4-m1(j);  
-    %pint(j)=pint
-    %cop(j)=m4*(h4-h5)/(m1(j)*(h2-h1)+m7(j)*(h3-h7));
-    
-% %     PUNTO 9
-% %     FISSO LA TEMPERATURA DEL CONDENSATORE (Tco=60°C) e la PRESSIONE DEL
-% %     COMPRESSORE DI ALTA PRESSIONE ([5.58478329336861]bar) corrispoondente più o meno al COP massimonel caso bistaadio. L'indice j che
-% %     corrisponde a questi valori è j=24. Quindi mi prendo i valori per
-% %     j=24. Entro con questi dati all'interno dell'IF e mi calcolo la cilindrata dei due compressori    
-%     if (j==24)&&(T_A==60)
-%         j=24;
-%         ac=1.086; %valori per il rendimento del compressore
-%         bc=-0.07129;
-% %     COMPRESSORE ALTA
-%         betacil(j)=pint(j)/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
-%         etacil(j)=ac*exp(bc*betacil(j)); %rendimento del compressore volumetrico
-%         rho=refpropm('d','p',pint(j)*100,'h',h7*1000,fluid); %densità dell'aria aspirata al punto 7
-%         CILa=m7(j)/(rho*etacil(j))*1000   %cilindrata in LITRI
-% %     COMPRESSORE BASSA
-%         betacil=pco/pev; %la pint(j) si riferisce al suo ultimo valore nelle T_A_vett. Quindi si riferisce sempre ai 60°C.
-%         etacil=ac*exp(bc*betacil); %rendimento del compressore volumetrico
-%         rho=refpropm('d','p',pint(j)*100,'h',h1*1000,fluid); %densità
-%         dell'aria aspirata al punto 1
-%         CILb=m1(j)/(rho*etacil)*1000   %cilindrata in LITRI
-%     end
-    
-    
+    m41c(j)=m1c(j)/m4(j);                           %portata ridotta con cilindrata fissa
+    m41v(j)=m1v(j)/m4(j);                           %portata ridotta con cilindrata variabile
+
     end %fine ciclo temperatura intermedia j
 
-    %GRAFICO PORTATA DEL COMPRESSORE DI BASSA PRESSIONE vs PRESSIONE
-    %INTERNA
+    %% GRAFICO PORTATA DEL COMPRESSORE DI BASSA PRESSIONE vs PRESSIONE
+    %  INTERNA
+    [x,y]=polyxpoly(pint, m41v,pint,m41c);  %restituisce i due punti dell'intersezione delle due curve
+    xi=linspace(0,x,2);
+    xi0=[x x];
+    yi0=[y y];
+    yi=linspace(0,y,2);
     figure(1)
-    %legend_portata_cpbasso=sprintf('Temperatura CO 60 °C');
-    plot(pint, m41v,'r',pint,m41c,'k');
-    %legend(legend_portata_cpbasso);
-    title('r1234yf');
-    xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-    ylabel('Portata corretta','FontName','Times','FontSize',18,'FontWeight','Bold')
-    grid on
-%     %GRAFICO PORTATA DEL COMPRESSORE DI ALTA PRESSIONE vs PRESSIONE
-%     %INTERNA
-%     figure(2)
-%     grid on
-%     legend_portata_cpbasso=sprintf('Temperatura CO 60 °C');
-%     plot(pint, m7);
-%     legend(legend_portata_cpbasso);
-%     hold on
-%     title('r1234yf');
-%     xlabel('Pressione intermedia [unità di misura]','FontName','Times','FontSize',18,'FontWeight','Bold')
-%     ylabel('Portata del compressore di alta pressione','FontName','Times','FontSize',18,'FontWeight','Bold') 
-%     hold on
+    plot(pint, m41v,'r')
+    hold on
+    plot(pint,m41c,'k')
+    hold on
+    plot(x,y,'o',xi0,yi,'--g',xi,yi0,'--g');
+    legend('Cilindrata variabile','Cilindrata fissa');
+    title('T=60°C; Fluido: r1234yf');
+    xlabel('Pressione intermedia [bar]','FontName','Times','FontSize',18,'FontWeight','Bold')
+    ylabel('Portata ridotta','FontName','Times','FontSize',18,'FontWeight','Bold')
+    grid minor
     
+  
